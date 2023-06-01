@@ -1,3 +1,5 @@
+// No License, should consider a license.
+
 #include<stdio.h>
 #include<string.h>
 #define SIZE 100
