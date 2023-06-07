@@ -1,5 +1,3 @@
-// No License, should consider a license.
-
 #include<stdio.h>
 #include<string.h>
 #define SIZE 100
@@ -7,6 +5,11 @@
 
 double my_pocket=100;
 int my_count[LISTMAX];
+
+char admin_login();
+void admin_enter();
+char user_login();
+void user_enter();
 
 struct item    //"商品"个体 
 {
@@ -29,8 +32,62 @@ struct item list[LISTMAX]=
 		"炎炎夏日，何尝不来一个大大的西瓜？"
 	  }
 	};
+	
+char get_first()   //检测输入项是否符合标准 
+{
+	
+	char ch;
+	scanf(" %c",&ch);
+	while(getchar()!='\n')
+	{
+		continue;
+		ch=getchar();
+	}
+	return ch;
+}
 
-void purchase();
+char get_enterchoice()    //UI设计+三大板块（管理员模式，用户模式，退出） 
+{
+	char ch;
+	printf("\t===================================\n");
+	printf("\t\t请输入您要登陆的类型:\n");
+	printf("\t\ta.管理员账户登陆\n\t\tb.用户账号登陆\n\t\tc.退出\n");
+	printf("\t===================================\n");
+	ch=get_first();
+	while(ch<'a'||ch>'c')
+	{
+		printf("错误！请重新输入！");
+		ch=get_first();
+	}
+	
+	return ch;
+}
+
+void purchase()
+{
+	int num;
+	int buychoice;
+	double sum;
+	printf("请输入购买的商品序号：\n");
+	scanf("%d",&buychoice);
+	printf("请输入购买的数量:\n");
+	scanf("%d",&num);
+	sum=num*list[buychoice-1].prize;
+	if(my_pocket>=sum)
+	{
+			my_pocket-=sum;
+			my_count[buychoice-1]+=num;
+			printf("购买成功！,您还剩下%lf CNY\n",my_pocket);
+	
+	}
+	else
+	{
+		printf("钱不够哦，请充值！");
+	
+	}
+	user_enter();
+}
+
 void store()  //控制 "已知"的商品库 
 {
 	int index;
@@ -46,10 +103,6 @@ void store()  //控制 "已知"的商品库
 	}
 	printf("\t=====================================================\n");
 }
-
-char get_first();
-void admin_enter();
-void user_enter();
 
 void dealt()
 {
@@ -108,36 +161,38 @@ void dealt()
 	}
 	 
 }
-char get_enterchoice()    //UI设计+三大板块（管理员模式，用户模式，退出） 
-{
-	char ch;
-	printf("\t===================================\n");
-	printf("\t\t请输入您要登陆的类型:\n");
-	printf("\t\ta.管理员账户登陆\n\t\tb.用户账号登陆\n\t\tc.退出\n");
-	printf("\t===================================\n");
-	ch=get_first();
-	while(ch<'a'||ch>'c')
-	{
-		printf("错误！请重新输入！");
-		ch=get_first();
-	}
-	
-	return ch;
-	
-}
 
-char get_first()   //检测输入项是否符合标准 
+int main()
 {
+	char choice;
+	printf("\t===================================\n");
+	printf("\t\t掏包网，掏走你喜欢的！\n");
+	printf("\t***********************************\n");
+      choice=get_enterchoice();
+      
+      if(choice=='a')
+      {
+      	admin_login();
+	  }
+	  else if(choice=='b')
+	  {
+	  	user_login();
+	  }
+	  else if(choice=='c')
+	  {
+	  	printf("感谢您的使用，欢迎下次光临！\n");
+	  }
+	  else
+	  {
+	  	printf("错误！非合法指令！\n");
+	  	get_enterchoice();
+	  	
+	  }
 	
-	char ch;
-	scanf(" %c",&ch);
-	while(getchar()!='\n')
-	{
-		continue;
-		ch=getchar();
-	}
-	return ch;
-}
+	
+	return 0;
+} 
+
 
 char admin_login()  //管理员界面登陆 
 {
@@ -282,60 +337,4 @@ void user_enter()  //登陆后的用户界面UI+三大板块（购买商品，�
 	}
 	
 }
-
-void purchase()
-{
-	int num;
-	int buychoice;
-	double sum;
-	printf("请输入购买的商品序号：\n");
-	scanf("%d",&buychoice);
-	printf("请输入购买的数量:\n");
-	scanf("%d",&num);
-	sum=num*list[buychoice-1].prize;
-	if(my_pocket>=sum)
-	{
-			my_pocket-=sum;
-			my_count[buychoice-1]+=num;
-			printf("购买成功！,您还剩下%lf CNY\n",my_pocket);
-	
-	}
-	else
-	{
-		printf("钱不够哦，请充值！");
-	
-	}
-	user_enter();
-}
-
-int main()
-{
-	char choice;
-	printf("\t===================================\n");
-	printf("\t\t掏包网，掏走你喜欢的！\n");
-	printf("\t***********************************\n");
-      choice=get_enterchoice();
-      
-      if(choice=='a')
-      {
-      	admin_login();
-	  }
-	  else if(choice=='b')
-	  {
-	  	user_login();
-	  }
-	  else if(choice=='c')
-	  {
-	  	printf("感谢您的使用，欢迎下次光临！\n");
-	  }
-	  else
-	  {
-	  	printf("错误！非合法指令！\n");
-	  	get_enterchoice();
-	  	
-	  }
-	
-	
-	return 0;
-} 
 
